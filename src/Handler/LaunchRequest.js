@@ -1,5 +1,7 @@
 'use strict';
 
-const LaunchHandler = function () {
+const LaunchRequestHandler = function () {
     this.emit('HelloWorldIntent');
 };
+
+module.exports = LaunchRequestHandler;

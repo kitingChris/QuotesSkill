@@ -63,3 +63,5 @@ typings/
 .gitignore
 QuotesSkill.iml
 /.idea/
+src/config.json
+artifact.zip
