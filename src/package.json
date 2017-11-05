@@ -1,0 +1,23 @@
+{
+  "name": "QuotesSkill",
+  "version": "0.0.1",
+  "description": "Give a random quote",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "alexa",
+    "skill",
+    "settings"
+  ],
+  "author": "Christian Ego",
+  "license": "CC-BY-NC-ND-4.0",
+  "dependencies": {
+    "alexa-sdk": "^1.0.18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://gogs.c-ego.net/chris/QuotesSkill.git"
+  }
+}
