@@ -61,8 +61,5 @@ typings/
 
 
 .gitignore
-.idea/encodings.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/workspace.xml
 QuotesSkill.iml
+/.idea/
