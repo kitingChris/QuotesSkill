@@ -14,7 +14,9 @@
   "author": "Christian Ego",
   "license": "CC-BY-NC-ND-4.0",
   "dependencies": {
-    "alexa-sdk": "^1.0.18"
+    "alexa-sdk": "^1.0.18",
+    "jsdom": "^11.3.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "repository": {
     "type": "git",
