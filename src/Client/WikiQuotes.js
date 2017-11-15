@@ -1,7 +1,7 @@
 "use strict";
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const Querystring = require('querystring');
-const {JSDOM} = require("jsdom");
+const DOMParser = require('xmldom').DOMParser;
 
 class WikiQuotes {
     constructor(apiEndpoint, options) {
@@ -9,7 +9,6 @@ class WikiQuotes {
 
         this.options = Object.assign({
             quotesSection: "1",
-            quotesQuerySelector: "div > ul > li",
         }, options || {});
     }
 
@@ -31,7 +30,6 @@ class WikiQuotes {
             self.getQuotesForSection(
                 pageId,
                 sections.sections[randomSectionNum],
-                self.options.quotesQuerySelector,
                 selectRandomQuote,
                 errorHandler
             );
@@ -55,7 +53,7 @@ class WikiQuotes {
     };
 
 
-    getQuotesForSection(pageid, sectionIndex, quotesQuerySelector, successHandler, errorHandler) {
+    getQuotesForSection(pageid, sectionIndex, successHandler, errorHandler) {
         _sendXMLHttpRequest({
             url: this.apiEndpoint,
             data: {
@@ -76,13 +74,16 @@ class WikiQuotes {
 
                     const quotesHtml = result.parse.text["*"];
 
-                    const dom = new JSDOM(quotesHtml);
+                    const doc = new DOMParser().parseFromString(quotesHtml);
 
-                    const quotesHtmlList = dom.window.document.querySelectorAll(quotesQuerySelector);
 
-                    quotesHtmlList.forEach(function (quotesHtmlListItem) {
-                        quotes.push(quotesHtmlListItem.textContent);
-                    });
+                    const lis = _findFirstLevelLi(doc.documentElement);
+
+                    for (let i in lis) {
+                        if (lis.hasOwnProperty(i)) {
+                            quotes.push(_findText(lis[i]));
+                        }
+                    }
 
                 } catch (e) {
                     _handleError(e);
@@ -219,6 +220,43 @@ function _sendXMLHttpRequest(options) {
     xhr.open(options.method, options.url);
 
     xhr.send();
+}
+
+
+function _findFirstLevelLi(element) {
+    let lis = [];
+
+    if(element.nodeName === 'dl') {
+        return lis;
+    }
+
+    if(element.nodeName === 'li') {
+        lis.push(element);
+    } else {
+        for(let i in element.childNodes) {
+            if(element.childNodes.hasOwnProperty(i)) {
+                lis = lis.concat(_findFirstLevelLi(element.childNodes[i]));
+            }
+        }
+    }
+
+    return lis;
+}
+
+function _findText(element) {
+    let text = '';
+
+    for(let i in element.childNodes) {
+        if(element.childNodes.hasOwnProperty(i)) {
+            text += element.childNodes[i].data || '';
+            if (element.childNodes[i].nodeName !== 'li') {
+                text += _findText(element.childNodes[i]);
+            }
+        }
+    }
+
+    return text;
+    //return element.toString();
 }
 
 module.exports = WikiQuotes;

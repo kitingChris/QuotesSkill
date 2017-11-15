@@ -1,7 +1,16 @@
 {
   "intents": [
     {
-      "intent": "HelloWorldIntent"
+      "intent": "RandomQuoteIntent"
+    },
+    {
+      "intent": "QuoteIntent",
+      "slots": [
+        {
+          "name": "author",
+          "type": "AMAZON.Person"
+        }
+      ]
     }
   ]
 }

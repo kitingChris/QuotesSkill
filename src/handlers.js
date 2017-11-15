@@ -1,9 +1,9 @@
 'use strict';
 
 const LaunchRequestHandler = require('./Handler/LaunchRequest');
-const HelloWorldIntentHandler = require('./Handler/HelloWorldIntent');
+const RandomQuoteIntentHandler = require('./Handler/RandomQuoteIntent');
 
 module.exports = {
     'LaunchRequest': LaunchRequestHandler,
-    'HelloWorldIntent': HelloWorldIntentHandler,
+    'RandomQuoteIntent': RandomQuoteIntentHandler,
 };

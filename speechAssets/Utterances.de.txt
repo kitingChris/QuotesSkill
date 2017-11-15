@@ -1,1 +1,3 @@
-HelloWorldIntent hallo welt
+RandomQuoteIntent zitiere jemanden
+RandomQuoteIntent erzähle ein zufälliges zitat
+RandomQuoteIntent gib mir ein zufälliges zitat
