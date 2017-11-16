@@ -1,3 +1,5 @@
 RandomQuoteIntent zitiere jemanden
 RandomQuoteIntent erzähle ein zufälliges zitat
 RandomQuoteIntent gib mir ein zufälliges zitat
+RandomQuoteIntent nach einem zufälligen zitat
+RandomQuoteIntent nach einem zitat von {author}

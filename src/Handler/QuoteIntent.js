@@ -2,9 +2,13 @@
 
 const WikiQuotesClient = require('../Client/WikiQuotes');
 
-const RandomQuoteIntentHandler = function () {
+const QuoteIntentHandler = function () {
 
     const self = this;
+
+    console.log(this.event.request.intent.slots);
+
+    const author = this.event.request.intent.slots.author.value;
 
     const wq = new WikiQuotesClient('https://de.wikiquote.org/w/api.php', {quotesSection:"2"});
 
@@ -17,7 +21,7 @@ const RandomQuoteIntentHandler = function () {
             self.emit(':tellWithCard', speechOutput, cardTitle, cardContent);
         },
         function (error) {
-            const speechOutput = 'Es tut mir leid aber ich konnte bei WikiQuotes kein Zitat finden.';
+            const speechOutput = 'Es tut mir leid aber ich konnte bei WikiQuotes kein Zitat zu dieser Person finden.';
             console.error(error);
             self.emit(':tell', speechOutput);
         }
@@ -25,4 +29,4 @@ const RandomQuoteIntentHandler = function () {
 
 };
 
-module.exports = RandomQuoteIntentHandler;
+module.exports = QuoteIntentHandler;

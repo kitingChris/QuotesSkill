@@ -3,6 +3,8 @@ const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const Querystring = require('querystring');
 const DOMParser = require('xmldom').DOMParser;
 
+const QUOTE_LENGTH_LIMIT = 25;
+
 class WikiQuotes {
     constructor(apiEndpoint, options) {
         this.apiEndpoint = apiEndpoint || 'https://en.wikiquote.org/w/api.php';
@@ -81,16 +83,21 @@ class WikiQuotes {
 
                     for (let i in lis) {
                         if (lis.hasOwnProperty(i)) {
-                            quotes.push(_findText(lis[i]));
+
+                            let quote = _findText(lis[i]);
+
+                            quote = _reformatQuote(quote);
+
+                            quotes.push(quote);
                         }
                     }
 
                 } catch (e) {
-                    _handleError(e);
+                    errorHandler(e);
                 }
 
                 if (quotes.length === 0) {
-                    _handleError('No quotes found in section ' + sectionIndex + ' on page ' + (title || 'with id: ' + pageid));
+                    errorHandler('No quotes found in section ' + sectionIndex + ' on page ' + (title || 'with id: ' + pageid));
                     return;
                 }
 
@@ -125,11 +132,11 @@ class WikiQuotes {
                         }
                     }
                 } catch (e) {
-                    _handleError(e);
+                    errorHandler(e);
                 }
 
                 if (pageid === null) {
-                    _handleError('No quotes found for ' + titles);
+                    errorHandler('No quotes found for ' + titles);
                     return;
                 }
 
@@ -176,11 +183,11 @@ class WikiQuotes {
                     }
 
                 } catch (e) {
-                    _handleError(e);
+                    errorHandler(e);
                 }
 
                 if (sections.length === 0) {
-                    _handleError('No quotes found on page ' + (title || 'with id: ' + pageid));
+                    errorHandler('No quotes found on page ' + (title || 'with id: ' + pageid));
                     return;
                 }
 
@@ -241,6 +248,22 @@ function _findFirstLevelLi(element) {
     }
 
     return lis;
+}
+
+function _reformatQuote(quote) {
+
+    let start = quote.indexOf('"');
+
+    if(start >= 0) {
+        let end = quote.indexOf('"', start+1);
+        quote = quote.substring(start, end-start+1);
+    }
+
+    quote = quote.replace('"', '');
+
+    if(quote.length > QUOTE_LENGTH_LIMIT) {
+        return quote.substring(0, quote.indexOf('.', QUOTE_LENGTH_LIMIT)+1);
+    }
 }
 
 function _findText(element) {
